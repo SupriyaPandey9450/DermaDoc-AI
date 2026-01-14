@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="static/DermaDocAI.png/" type="image/x-icon">
+  <title>DermaDoc AI</title>
+  <style>
+    :root{
+      --brand:#00796b;
+      --accent:rgba(14,47,97,0.7);
+      --cardGrad1:#e3f2fd;
+      --cardGrad2:#e8f5e9;
+      --shadow:0 4px 20px rgba(0,0,0,0.15);
+    }
+    *{box-sizing:border-box; margin:0; padding:0;}
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url("/static/chat.jpg") no-repeat center center/cover;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(2px);
+      z-index: -1;
+    }
+
+    /* Navbar Styling */
+    nav {
+      background: linear-gradient(90deg, #00796b);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      position: sticky;
+      top:0;
+      z-index: 10;
+    }
+    nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    nav .logo img {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      background: white;
+      padding: 5px;
+    }
+    nav ul {list-style: none; display: flex; gap: 25px;}
+    nav ul li a {
+      text-decoration: none; color: white; font-weight: 500; font-size: 16px;
+      padding: 6px 12px; border-radius: 6px;
+    }
+    nav ul li a:hover {background: rgba(255,255,255,0.2);}
+    nav ul li a.active {background: white; color: #0066cc; font-weight: bold;}
+
+    .back-btn-circle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+      z-index: 999;
+    }
+    .back-btn-circle:hover {
+      background: #005f52;
+      transform: scale(1.1);
+    }
+    .page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .heading {
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      margin-bottom: 24px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .main {
+      max-width: 600px;
+      width: 100%;
+    }
+   
+
+    .card {
+      background: linear-gradient(135deg, var(--cardGrad1), var(--cardGrad2));
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 30px 24px;
+      text-align: left;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity:0; transform: translateY(20px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+
+    .upload-section input[type="file"],
+    .upload-section input[type="text"]{
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: var(--brand);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+      transition:  0.2s, transform 0.1s;
+    }
+    .btn:hover { background: #005f52; }
+    .btn:active{ transform: scale(0.98); }
+
+    .voice-btn { background: #f44336; margin-left: 10px; }
+    .voice-btn:hover { background: #d32f2f; }
+
+    #output { margin-top: 14px; color: #444; font-weight: 500; }
+    #prediction { margin-top: 20px; font-size: 18px; font-weight: bold; color: green; }
+  </style>
+</head>
+<body>
+   <nav>
+    <a href="{{ url_for('index_page') }}" class="logo">
+      <img src="{{ url_for('static', filename='DermaDocAI.png') }}" alt="Logo">
+      DermaDoc AI
+    </a>
+    <ul>
+      <li><a href="{{ url_for('index_page') }}">Home</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+      
+      <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+      <li><a href="{{ url_for('login') }}" class="active">Login</a></li>
+    </ul>
+  </nav>
+
+  <section class="page">
+    <h1 class="heading">Upload Your Skin Image & Detect Disease in Seconds</h1>
+
+    <div class="main">
+      <div class="upload-section card">
+        <input id="userImage" type="file" accept="image/*" />
+        <input type="text" id="userText" placeholder="Describe your skin problem..." />
+
+        <div>
+          <button class="btn" onclick="detectNow()">Detect Now</button>
+          <button class="btn voice-btn" onclick="startVoice()">🎤 Speak</button>
+        </div>
+
+        <div id="output"></div>
+        <div id="prediction"></div>
+      </div> 
+    </div>
+  </section>
+  <!-- Niche corner back button -->
+  <div class="back-btn-circle" onclick="location.href='index'">⬅</div>
+
+
+<script>
+  // Detect button action
+  async function detectNow() {
+    const fileInput = document.getElementById("userImage");
+    const output = document.getElementById("output");
+
+    if (fileInput.files.length === 0) {
+      output.innerText = "Please upload an image first!";
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+  fetch("/predict", { method: "POST", body: formData })
+    .then(res => res.text())
+    .then(html => {
+        document.body.innerHTML = html;
+    });
+
+    try {
+      const response = await fetch("/predict", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.prediction) {
+        // Save result to localStorage
+        localStorage.setItem("userDesc", document.getElementById("userText").value);
+        localStorage.setItem("prediction", data.prediction);
+        // Redirect to result page
+        window.location.href = "result";
+      } else {
+        output.innerText = "Error: " + (data.error || "Something went wrong");
+      }
+    } catch (err) {
+      output.innerText = "Fetch error: " + err;
+    }
+  }
+</script>
+
+  <script>
+  // Voice input
+  function startVoice() {
+    if (!('webkitSpeechRecognition' in window)) {
+      alert("Speech Recognition not supported in this browser.");
+      return;
+    }
+
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = "en-US";  // Language
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    recognition.onresult = function(event) {
+      const transcript = event.results[0][0].transcript;
+      document.getElementById("userText").value = transcript;
+      document.getElementById("output").innerText = "Voice input: " + transcript;
+    };
+
+    recognition.onerror = function(event) {
+      document.getElementById("output").innerText = "Error: " + event.error;
+    };
+  }
+</script>
+
+</body>
+</html>
