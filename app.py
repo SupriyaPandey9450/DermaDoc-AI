@@ -15,9 +15,22 @@ def teardown_db(exception):
 app.secret_key = "replace_with_a_secure_random_key"
 
 # ---------------- Load Model ---------------- #
-model = load_model("skin_disease_model.h5")
+from huggingface_hub import hf_hub_download
+import json
+from tensorflow.keras.models import load_model
+
+# Download model from Hugging Face Model Hub
+model_path = hf_hub_download(
+    repo_id="AanamikaKumari/skin-disease-model",
+    filename="skin_disease_model.h5"
+)
+
+model = load_model(model_path)
+
+# Load class labels (local file)
 with open("class_labels.json", "r") as f:
     class_labels = json.load(f)
+
 
 # ---------------- Decorators ---------------- #
 def login_required(f):
