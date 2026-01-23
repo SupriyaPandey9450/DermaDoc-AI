@@ -19,17 +19,24 @@ from huggingface_hub import hf_hub_download
 import json
 from tensorflow.keras.models import load_model
 
-# Download model from Hugging Face Model Hub
+# 🔹 Download model from HF
+MODEL_REPO = "AanamikaKumari/skindisease-model"
+
 model_path = hf_hub_download(
-    repo_id="AanamikaKumari/skin-disease-model",
+    repo_id=MODEL_REPO,
     filename="skin_disease_model.h5"
+)
+
+labels_path = hf_hub_download(
+    repo_id=MODEL_REPO,
+    filename="class_labels.json"
 )
 
 model = load_model(model_path)
 
-# Load class labels (local file)
-with open("class_labels.json", "r") as f:
+with open(labels_path) as f:
     class_labels = json.load(f)
+
 
 
 # ---------------- Decorators ---------------- #
