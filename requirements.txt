@@ -1,5 +1,6 @@
 flask
 tensorflow==2.20.1
+keras==2.15.0
 numpy
 pillow
 werkzeug
