@@ -23,12 +23,12 @@ from tensorflow.keras.models import load_model
 MODEL_REPO = "AanamikaKumari/skindisease-model"
 
 model_path = hf_hub_download(
-    repo_id=MODEL_REPO,
+    repo_id="AanamikaKumari/skindisease-model",
     filename="skin_disease_model.h5"
 )
 
 labels_path = hf_hub_download(
-    repo_id=MODEL_REPO,
+    repo_id="AanamikaKumari/skindisease-model",
     filename="class_labels.json"
 )
 
