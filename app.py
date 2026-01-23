@@ -32,7 +32,8 @@ labels_path = hf_hub_download(
     filename="class_labels.json"
 )
 
-model = load_model(model_path)
+model = load_model("skin_disease_model.keras", compile=False)
+
 
 with open(labels_path) as f:
     class_labels = json.load(f)

@@ -1,8 +1,7 @@
-
 # model.py
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import json
 
@@ -10,7 +9,7 @@ import json
 train_dir = "dataset/train"
 test_dir = "dataset/test"
 
-# Image generator (augmentation)
+# Image generator
 train_datagen = ImageDataGenerator(rescale=1./255)
 test_datagen = ImageDataGenerator(rescale=1./255)
 
@@ -29,33 +28,44 @@ test_data = test_datagen.flow_from_directory(
     class_mode='categorical'
 )
 
-# CNN Model
+# ✅ CNN Model (UPDATED INPUT PART)
 model = Sequential([
-    Conv2D(32, (3,3), activation='relu', input_shape=(128,128,3)),
+    Input(shape=(128, 128, 3)),   # 👈 IMPORTANT FIX
+
+    Conv2D(32, (3,3), activation='relu'),
     MaxPooling2D(pool_size=(2,2)),
-    
+
     Conv2D(64, (3,3), activation='relu'),
     MaxPooling2D(pool_size=(2,2)),
-    
+
     Flatten(),
     Dense(128, activation='relu'),
     Dropout(0.5),
-    Dense(train_data.num_classes, activation='softmax')  # output = no. of classes
+    Dense(train_data.num_classes, activation='softmax')
 ])
 
 # Compile
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(
+    optimizer='adam',
+    loss='categorical_crossentropy',
+    metrics=['accuracy']
+)
 
 # Train
-history = model.fit(
+model.fit(
     train_data,
     validation_data=test_data,
     epochs=30
 )
 
-# Save model
-model.save("skin_disease_model.h5")
+# ✅ SAVE MODEL (DEPLOYMENT SAFE)
+model.save("skin_disease_model", save_format="tf")   # 👈 BEST for Hugging Face
+
+# (Optional backup)
+model.save("skin_disease_model.keras")
+
+# Save labels
 with open("class_labels.json", "w") as f:
     json.dump(list(train_data.class_indices.keys()), f)
 
-print("✅ Model training complete & saved as skin_disease_model.h5")
+print("✅ Model training complete & saved safely")
