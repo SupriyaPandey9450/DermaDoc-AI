@@ -132,19 +132,29 @@
     <div class="grid">
       <div class="card">
         <h3>📝 User Description</h3>
-        <p id="userDesc">Loading...</p>
+        <!-- <p id="userDesc">Loading...</p> -->
+         <p>{{ session.get('userDesc', 'No description provided.') }}</p>
+
+
       </div>
       <div class="card">
         <h3>🩺 Predicted Disease</h3>
-        <p id="predictedDisease">Loading...</p>
+        <!-- <p id="predictedDisease">Loading...</p> -->
+         <p>{{ prediction }}</p>
+
       </div>
       <div class="card">
         <h3>⚠ Symptoms</h3>
-        <p id="symptoms">Loading...</p>
+        <!-- <p id="symptoms">Loading...</p> -->
+         <p>{{ symptoms }}</p>
+
+
       </div>
       <div class="card">
         <h3>💊 Suggested Solution</h3>
-        <p id="solution">Loading...</p>
+        <!-- <p id="solution">Loading...</p> -->
+         <!-- <p>{{ solution }}</p> -->
+         <p>{{ solution }}</p> 
         <button id="speakBtn">🔊 Speak Solution</button>
       </div>
     </div>
@@ -169,51 +179,51 @@
   <script>
     // Symptoms + solutions mapping
     const diseaseInfo = {
-      "Acne": {
+      "acne": {
         symptoms: "Pimples, blackheads, oily skin",
         solution: "Use mild cleanser, avoid oily foods, consult dermatologist if severe."
       },
-      "Eczema": {
+      "eczema": {
         symptoms: "Itching, redness, irritation",
         solution: "Use moisturizer, avoid allergens, consult a dermatologist if severe."
       },
-      "Psoriasis": {
+      "psoriasis": {
         symptoms: "Dry, scaly patches, skin pain",
         solution: "Apply medicated creams, stay hydrated, consult doctor for treatment."
       },
-       "Actinic_Keratosis": {
+       "actinic_Keratosis": {
       symptoms: "Rough, scaly patches on sun-exposed skin",
       solution: "Protect skin from sun, use sunscreen, dermatologist may recommend cryotherapy or medication."
     },
-    "Benign_tumors": {
+    "benign_tumors": {
       symptoms: "Non-cancerous lumps or growths on skin",
       solution: "Monitor growth, seek medical check-up, surgery only if causing discomfort."
     },
-    "Bullous": {
+    "bullous": {
       symptoms: "Large fluid-filled blisters on skin",
       solution: "Keep affected area clean, avoid friction, consult doctor for treatment and medication."
     },
-    "Candidiasis": {
+    "candidiasis": {
       symptoms: "Red, itchy rash, sometimes white patches (fungal infection)",
       solution: "Keep area dry, use antifungal cream, maintain good hygiene, avoid tight clothing."
     },
-    "DrugEruption": {
+    "drugEruption": {
       symptoms: "Rash, redness, itching caused by medication",
       solution: "Stop suspected medicine (only after doctor’s advice), consult dermatologist immediately."
     },
-    "Infestations_Bites": {
+    "infestations_Bites": {
       symptoms: "Red bumps, itching, swelling due to insect/parasite bites",
       solution: "Apply anti-itch cream, keep skin clean, avoid scratching, consult doctor if spreading."
     },
-    "Lichen": {
+    "lichen": {
       symptoms: "Purple, itchy, flat bumps on skin",
       solution: "Use medicated creams, avoid scratching, consult dermatologist for treatment."
     },
-    "Lupus": {
+    "lupus": {
       symptoms: "Butterfly-shaped rash on face, joint pain, fatigue",
       solution: "Protect from sunlight, use prescribed medicines, regular check-ups with rheumatologist/dermatologist."
     },
-    "Psoriasis": {
+    "psoriasis": {
       symptoms: "Dry, thick, scaly patches on skin, itching",
       solution: "Apply medicated creams, moisturize skin, manage stress, consult dermatologist."
     }
@@ -242,8 +252,8 @@
 
     window.onload = function() {
       // Get data from localStorage
-      const userDesc = localStorage.getItem("userDesc");
-      const prediction = localStorage.getItem("prediction");
+      // const userDesc = localStorage.getItem("userDesc");
+      // const prediction = localStorage.getItem("prediction");
 
       document.getElementById("userDesc").innerText = userDesc || "No description provided.";
       document.getElementById("predictedDisease").innerText = prediction || "No prediction available.";

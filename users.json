@@ -1,0 +1,13 @@
+{
+  "users": {
+    "supriyapandey2930@gmail.com": {
+      "name": "Supriya",
+      "phone": "9450036870",
+      "age": "21",
+      "gender": "Female",
+      "role": "Patient",
+      "password": "scrypt:32768:8:1$ig0kylZnCqBQv68K$3b34c4efaa13f2d1d2814bb6c8e9ef103c155e42c63f12aa2fe9470469f4167912dd5debb052aa8f5da1ef6dd4d2977016b8be2353ae103cd444f70666778201",
+      "profile_pic": null
+    }
+  }
+}
